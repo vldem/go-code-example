@@ -1,0 +1,428 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api_backend.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Backend"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ozon.dev.vldem.hw2.api.Backend/UserCreate": {
+      "post": {
+        "operationId": "Backend_UserCreate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserCreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserCreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/ozon.dev.vldem.hw2.api.Backend/UserDelete": {
+      "post": {
+        "operationId": "Backend_UserDelete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserDeleteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserDeleteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/ozon.dev.vldem.hw2.api.Backend/UserGet": {
+      "post": {
+        "operationId": "Backend_UserGet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserGetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserGetRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/ozon.dev.vldem.hw2.api.Backend/UserList": {
+      "post": {
+        "operationId": "Backend_UserList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserListRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/ozon.dev.vldem.hw2.api.Backend/UserUpdate": {
+      "post": {
+        "operationId": "Backend_UserUpdate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserUpdateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBackendUserUpdateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    },
+    "/ozon.dev.vldem.hw2.api.Backend/UsersAdd": {
+      "post": {
+        "operationId": "Backend_UsersAdd",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/apiBackendUsersAddResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of apiBackendUsersAddResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " (streaming inputs)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBackendUsersAddRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Backend"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "apiBackendUserCreateRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "apiBackendUserCreateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "apiBackendUserDeleteRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "apiBackendUserDeleteResponse": {
+      "type": "object"
+    },
+    "apiBackendUserGetRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "apiBackendUserGetResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "apiBackendUserListRequest": {
+      "type": "object",
+      "properties": {
+        "recPerPage": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "pageNum": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "order": {
+          "$ref": "#/definitions/apiBackendUserListRequestSortingOrder"
+        }
+      }
+    },
+    "apiBackendUserListRequestSortingOrder": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "descending": {
+          "type": "boolean"
+        }
+      }
+    },
+    "apiBackendUserListResponse": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiBackendUserListResponseUser"
+          }
+        }
+      }
+    },
+    "apiBackendUserListResponseUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "apiBackendUserUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "oldpassword": {
+          "type": "string"
+        }
+      }
+    },
+    "apiBackendUserUpdateResponse": {
+      "type": "object"
+    },
+    "apiBackendUsersAddRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "apiBackendUsersAddResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

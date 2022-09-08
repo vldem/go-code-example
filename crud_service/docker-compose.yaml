@@ -1,0 +1,53 @@
+version: "2.1"
+services:
+  postgresql:
+    image: docker.io/bitnami/postgresql:11
+    user: root
+    volumes:
+      - ./postgresql/data:/bitnami/postgresql
+    # - ./postgres.conf:/etc/postgresql/postgresql.conf # конфиг БД
+    # command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      - "ALLOW_EMPTY_PASSWORD=yes"
+      - "POSTGRESQL_USERNAME=user"
+      - "POSTGRESQL_PASSWORD=password"
+      - "POSTGRESQL_DATABASE=gohw"
+
+  pgbouncer:
+    image: docker.io/bitnami/pgbouncer:1
+    user: root
+    ports:
+      - 6432:6432
+    environment:
+      - POSTGRESQL_HOST=postgresql
+      - PGBOUNCER_AUTH_TYPE=trust
+      - POSTGRESQL_USERNAME=user
+      - POSTGRESQL_PASSWORD=password
+      - POSTGRESQL_DATABASE=gohw
+      - PGBOUNCER_DATABASE=gohw
+      - PGBOUNCER_SET_DATABASE_USER=user
+      - PGBOUNCER_SET_DATABASE_PASSWORD=password
+      - PGBOUNCER_POOL_MODE=transaction
+      - PGBOUNCER_MAX_CLIENT_CONN=900
+      - PGBOUNCER_IGNORE_STARTUP_PARAMETERS=extra_float_digits
+
+  postgres-test:
+    image: postgres:14.4
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=gohw-test
+    container_name: "pg-container-gohw-test"
+    volumes:
+      - ./postgresql/data/test:/var/lib/postgresql/data
+      - ./postgres.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    ports:
+      - 5432:5432
+    restart: always
+
+  redis:
+    container_name: "gohw-redis"
+    image: redis:latest
+    ports:
+      - "127.0.0.1:6379:6379"

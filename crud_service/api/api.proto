@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package ozon.dev.vldem.hw2.api;
+option go_package = "gitlab.ozon.dev/vldem/homework1/pkg/api;api";
+
+import "google/api/annotations.proto";
+
+service Admin {
+  rpc UserCreate(UserCreateRequest) returns (UserCreateResponse) {
+    option (google.api.http) = {
+      post: "/v1/user"
+      body: "*"
+    };
+  }
+
+  rpc UserGet(UserGetRequest) returns (UserGetResponse) {
+    option (google.api.http) = {
+      get: "/v1/user/{id}"
+    };
+  }
+
+  rpc UserList(UserListRequest) returns (UserListResponse) {
+    option (google.api.http) = {
+      get: "/v1/users"
+    };
+  }
+
+  rpc UsersAdd(UsersAddRequest) returns (UsersAddResponse) {
+    option (google.api.http) = {
+      post: "/v1/users"
+      body: "*"
+    };
+  }
+
+  rpc UserUpdate(UserUpdateRequest) returns (UserUpdateResponse) {
+    option (google.api.http) = {
+      put: "/v1/user"
+      body: "*"
+    };
+  }
+
+  rpc UserDelete(UserDeleteRequest) returns (UserDeleteResponse) {
+    option (google.api.http) = {
+      delete: "/v1/user"
+      body: "*"
+    };
+  }
+
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// UserCreate endpoint messages
+// ---------------------------------------------------------------------------------------------------------------------
+
+message UserCreateRequest {
+    string email    = 1;
+    string name     = 2;
+    string role     = 3;
+    string password = 4;
+}
+message UserCreateResponse {
+  uint64 id    = 1;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// UserList endpoint messages
+// ---------------------------------------------------------------------------------------------------------------------
+
+message UserListRequest {
+  optional uint64       rec_per_page = 1;
+  optional uint64       page_num     = 2;
+  optional SortingOrder order        = 3;
+
+  message SortingOrder {
+    string field      = 1;
+    bool   descending = 2;
+  }
+}
+message UserListResponse {
+  repeated User users = 1;
+
+  message User {
+    uint64 id    = 1;
+    string email = 2;
+    string name  = 3;
+    string role  = 4;
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// UserCreate endpoint messages
+// ---------------------------------------------------------------------------------------------------------------------
+
+message UsersAddRequest {
+  repeated User users = 1;
+
+  message User {
+    string email    = 1;
+    string name     = 2;
+    string role     = 3;
+    string password = 4;
+  }
+}
+message UsersAddResponse {
+  repeated uint64 ids    = 1;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// UserUpdate endpoint messages
+// ---------------------------------------------------------------------------------------------------------------------
+
+message UserUpdateRequest {
+  uint64 id          = 1;
+  string email       = 2;
+  string name        = 3;
+  string role        = 4;
+  string password    = 5;
+  string oldpassword = 6;
+}
+message UserUpdateResponse {}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// UserDelete endpoint messages
+// ---------------------------------------------------------------------------------------------------------------------
+
+message UserDeleteRequest {
+  uint64 id       = 1;
+  string password = 2;
+}
+message UserDeleteResponse {}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// UserGet endpoint messages
+// ---------------------------------------------------------------------------------------------------------------------
+
+message UserGetRequest {
+  uint64 id       = 1;
+}
+message UserGetResponse {
+  uint64 id    = 1;
+  string email = 2;
+  string name  = 3;
+  string role  = 4;
+}
