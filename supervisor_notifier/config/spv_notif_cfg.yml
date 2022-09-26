@@ -1,0 +1,13 @@
+email:
+  from: YOUR_FROM_EMAIL_HERE
+  to: YOUR_TO_EMAIL_HERE
+  subject: "[supervisor notification]"
+  mail_prog:
+    cmd: "/usr/sbin/sendmail"
+    args:
+      - "-t"
+      - "-oi"
+
+telegram:
+  botkey: YOUR_TELEGRAM_BOT_APIKEY_HERE
+  chatid: YOUR_TELEGRAM_CHAT_ID_WITH_BOT_HERE
