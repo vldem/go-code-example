@@ -21,13 +21,13 @@ spv_notif_cfg.yml example:
       botkey: YOUR_TELEGRAM_BOT_APIKEY_HERE
       chatid: YOUR_TELEGRAM_CHAT_ID_WITH_BOT_HERE
 
-You should place config file to directory `../config` or `../../config` from binary file's directory.
+You should place the config file to directory `../config` or `../../config` from binary file's directory.
 
 # Supervisor configuration
 
 There are two points in supervisor configuration that should be done in order to receive notification about needed supervisor's events.
 
-You need to configure eventlistener in supervisord.conf file. Below an example of such configuration:
+You need to configure eventlistener in supervisord.conf file. Below is an example of such configuration:
 
     [eventlistener:spv_notif]
     command=/YOUR_PATH/spv_notif
@@ -39,7 +39,7 @@ You need to configure eventlistener in supervisord.conf file. Below an example o
 Also it's necessary to add events line to program configuration like that:
 
     [program:worker]
-    command=php /YOUR*PATH/myworker
+    command=php /YOUR_PATH/myworker
     numprocs=1
     startsecs=0
     autostart=true
@@ -47,5 +47,5 @@ Also it's necessary to add events line to program configuration like that:
     process_name=%(program_name)s*%(process_num)02d
     events=PROCESS_STATE_EXITED,PROCESS_LOG_STRERR
 
-If your worker exits due to some reason event listener will catch event PROCESS_STATE_EXITED and
-will send notification to email or telegram chat that you specified in configuration.
+If your worker exits due to some reason the event listener will catch the event PROCESS_STATE_EXITED and
+will send a notification to email or the telegram chat that you specified in configuration.
