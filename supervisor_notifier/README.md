@@ -39,7 +39,7 @@ You need to configure eventlistener in supervisord.conf file. Below is an exampl
 Also it's necessary to add events line to program configuration like that:
 
     [program:worker]
-    command=php /YOUR_PATH/myworker
+    command=/YOUR_PATH/myworker
     numprocs=1
     startsecs=0
     autostart=true
