@@ -60,7 +60,7 @@ func ReadConfig() error {
 	}
 
 	if AppConfig.Email.Prog.Cmd == "" && AppConfig.Telegram.ChatId == 0 {
-		return errors.New("mail program and telegram bot parameters do not defined")
+		return errors.New("mail program and telegram bot parameters are not defined")
 	}
 
 	return nil
