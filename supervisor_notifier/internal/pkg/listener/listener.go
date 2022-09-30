@@ -8,14 +8,21 @@ import (
 	"strings"
 	"ur-services/spv-notif/internal/config"
 	botPkg "ur-services/spv-notif/internal/pkg/bot"
+	"ur-services/spv-notif/internal/pkg/mailer"
+	lmPkg "ur-services/spv-notif/internal/pkg/mailer/local"
 	"ur-services/spv-notif/internal/pkg/notifier"
 )
 
 func Listen() {
 	var bot botPkg.TelBot
+	var mailer mailer.Mailer
 
 	if config.AppConfig.Telegram.ChatId != 0 {
 		bot = botPkg.MustNew()
+	}
+
+	if config.AppConfig.Email.Prog.Cmd != "" {
+		mailer = lmPkg.New()
 	}
 
 	reader := bufio.NewReader(os.Stdin)
@@ -35,7 +42,7 @@ func Listen() {
 			continue
 		}
 
-		if err := notifier.Notify(bot, header, payload); err != nil {
+		if err := notifier.Notify(bot, mailer, header, payload); err != nil {
 			failure(err)
 			continue
 		}

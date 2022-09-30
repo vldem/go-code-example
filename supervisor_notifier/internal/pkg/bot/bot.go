@@ -22,16 +22,16 @@ func MustNew() TelBot {
 	bot.Debug = false
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	return &commander{
+	return &messageSender{
 		bot: bot,
 	}
 }
 
-type commander struct {
+type messageSender struct {
 	bot *tgbotapi.BotAPI
 }
 
-func (c *commander) SendMessage(message string) error {
+func (c *messageSender) SendMessage(message string) error {
 	msg := tgbotapi.NewMessage(config.AppConfig.Telegram.ChatId, "")
 	msg.Text = message
 	_, err := c.bot.Send(msg)

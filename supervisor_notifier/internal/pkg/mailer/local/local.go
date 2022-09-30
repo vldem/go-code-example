@@ -1,16 +1,29 @@
-package mailsender
+package local
 
 import (
 	"io"
 	"os/exec"
 	"ur-services/spv-notif/internal/config"
+	"ur-services/spv-notif/internal/pkg/mailer"
 	"ur-services/spv-notif/internal/pkg/models"
 
 	"github.com/pkg/errors"
 )
 
-func SendMail(mail models.Mail) error {
-	sender := exec.Command(config.AppConfig.Email.Prog.Cmd, config.AppConfig.Email.Prog.Args...)
+type localMailerImplementation struct {
+	Cmd  string
+	Args []string
+}
+
+func New() mailer.Mailer {
+	return &localMailerImplementation{
+		Cmd:  config.AppConfig.Email.Prog.Cmd,
+		Args: config.AppConfig.Email.Prog.Args,
+	}
+}
+
+func (m *localMailerImplementation) SendMail(mail models.Mail) error {
+	sender := exec.Command(m.Cmd, m.Args...)
 	stdin, err := sender.StdinPipe()
 	if err != nil {
 		return errors.Wrap(err, "opening stdin for mail prog")

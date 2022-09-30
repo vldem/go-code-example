@@ -3,13 +3,13 @@ package notifier
 import (
 	"ur-services/spv-notif/internal/config"
 	"ur-services/spv-notif/internal/pkg/bot"
-	"ur-services/spv-notif/internal/pkg/mailsender"
+	"ur-services/spv-notif/internal/pkg/mailer"
 	"ur-services/spv-notif/internal/pkg/models"
 )
 
-func Notify(bot bot.TelBot, header string, payload []byte) error {
+func Notify(bot bot.TelBot, mailer mailer.Mailer, header string, payload []byte) error {
 
-	if config.AppConfig.Email.Prog.Cmd != "" {
+	if mailer != nil {
 		mail := &models.Mail{
 			From:    config.AppConfig.Email.From,
 			To:      config.AppConfig.Email.To,
@@ -18,7 +18,7 @@ func Notify(bot bot.TelBot, header string, payload []byte) error {
 
 		mail.TextBody.Write([]byte(header))
 		mail.TextBody.Write(payload)
-		if err := mailsender.SendMail(*mail); err != nil {
+		if err := mailer.SendMail(*mail); err != nil {
 			return err
 		}
 	}
