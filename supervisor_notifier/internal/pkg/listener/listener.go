@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
-	"strings"
 	"time"
 	"ur-services/spv-notif/internal/pkg/event"
 	notifPkg "ur-services/spv-notif/internal/pkg/notifier"
@@ -89,21 +87,4 @@ func (l SupervisorListener) readPayload(reader *bufio.Reader, payloadLen int) (s
 	}
 
 	return string(buf), nil
-}
-
-func (l SupervisorListener) getPayloadLen(header string) int {
-	header = strings.TrimSpace(header)
-
-	items := strings.Split(header, " ")
-	if len(items) == 0 {
-		return 0
-	}
-
-	lengthMap := strings.Split(items[len(items)-1], ":")
-	if len(lengthMap) < 2 {
-		return 0
-	}
-
-	length, _ := strconv.Atoi(lengthMap[1])
-	return length
 }
