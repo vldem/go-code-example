@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 	"ur-services/spv-notif/internal/config"
-	"ur-services/spv-notif/internal/pkg/listener"
+	listenerPgk "ur-services/spv-notif/internal/pkg/listener"
 )
 
 func main() {
-
+	listener := listenerPgk.New()
 	listener.Listen()
 
 }

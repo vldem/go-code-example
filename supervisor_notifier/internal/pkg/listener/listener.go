@@ -6,65 +6,73 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"ur-services/spv-notif/internal/config"
-	botPkg "ur-services/spv-notif/internal/pkg/bot"
-	"ur-services/spv-notif/internal/pkg/mailer"
-	lmPkg "ur-services/spv-notif/internal/pkg/mailer/local"
-	"ur-services/spv-notif/internal/pkg/notifier"
+	"time"
+	"ur-services/spv-notif/internal/pkg/event"
+	notifPkg "ur-services/spv-notif/internal/pkg/notifier"
 )
 
-func Listen() {
-	var bot botPkg.TelBot
-	var mailer mailer.Mailer
+type SupervisorListener struct {
+	programs map[string]time.Time
+}
 
-	if config.AppConfig.Telegram.ChatId != 0 {
-		bot = botPkg.MustNew()
+func New() *SupervisorListener {
+
+	return &SupervisorListener{
+		programs: make(map[string]time.Time),
 	}
 
-	if config.AppConfig.Email.Prog.Cmd != "" {
-		mailer = lmPkg.New()
-	}
+}
 
+func (l *SupervisorListener) Listen() {
+
+	notifier := notifPkg.New()
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		ready()
+		l.ready()
 
-		header, err := readHeader(reader)
+		headerString, err := l.readHeader(reader)
 		if err != nil {
-			failure(err)
+			l.failure(err)
 			continue
 		}
+		header := event.GetHeader(headerString)
 
-		payload, err := readPayload(reader, getPayloadLen(header))
+		payloadString, err := l.readPayload(reader, header.Len)
 		if err != nil {
-			failure(err)
+			l.failure(err)
 			continue
 		}
+		payload := event.GetPayload(string(payloadString))
 
-		if err := notifier.Notify(bot, mailer, header, payload); err != nil {
-			failure(err)
-			continue
+		// send notification once per 5 minutes in order to avoid huge amount of the same notifications
+		if time.Since(l.programs[payload.ProcessName]) > time.Minute*5 {
+			l.programs[payload.ProcessName] = time.Now()
+
+			if err := notifier.Notify(headerString, payloadString); err != nil {
+				l.failure(err)
+				continue
+			}
 		}
 
-		success()
+		l.success()
 	}
 }
 
-func ready() {
+func (l SupervisorListener) ready() {
 	fmt.Fprint(os.Stdout, "READY\n")
 }
 
-func success() {
+func (l SupervisorListener) success() {
 	fmt.Fprint(os.Stdout, "RESULT 2\nOK")
 }
 
-func failure(err error) {
+func (l SupervisorListener) failure(err error) {
 	fmt.Fprintln(os.Stderr, err)
 	fmt.Fprint(os.Stdout, "RESULT 4\nFAIL")
 }
 
-func readHeader(reader *bufio.Reader) (string, error) {
+func (l SupervisorListener) readHeader(reader *bufio.Reader) (string, error) {
 	data, err := reader.ReadString('\n')
 	if err != nil {
 		return "", err
@@ -73,17 +81,17 @@ func readHeader(reader *bufio.Reader) (string, error) {
 	return data, nil
 }
 
-func readPayload(reader *bufio.Reader, payloadLen int) ([]byte, error) {
+func (l SupervisorListener) readPayload(reader *bufio.Reader, payloadLen int) (string, error) {
 	buf := make([]byte, payloadLen)
 	_, err := reader.Read(buf)
 	if err != nil {
-		return buf, err
+		return string(buf), err
 	}
 
-	return buf, nil
+	return string(buf), nil
 }
 
-func getPayloadLen(header string) int {
+func (l SupervisorListener) getPayloadLen(header string) int {
 	header = strings.TrimSpace(header)
 
 	items := strings.Split(header, " ")
@@ -91,11 +99,11 @@ func getPayloadLen(header string) int {
 		return 0
 	}
 
-	length := strings.Split(items[len(items)-1], ":")
-	if len(length) < 2 {
+	lengthMap := strings.Split(items[len(items)-1], ":")
+	if len(lengthMap) < 2 {
 		return 0
 	}
 
-	l, _ := strconv.Atoi(length[1])
-	return l
+	length, _ := strconv.Atoi(lengthMap[1])
+	return length
 }
