@@ -41,7 +41,7 @@ func (l *SupervisorListener) Listen() {
 			l.failure(err)
 			continue
 		}
-		payload := event.GetPayload(string(payloadString))
+		payload := event.GetPayload(payloadString)
 
 		// send notification once per 5 minutes in order to avoid huge amount of the same notifications
 		if time.Since(l.programs[payload.ProcessName]) > time.Minute*5 {
