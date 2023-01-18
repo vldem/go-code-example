@@ -15,9 +15,6 @@ import (
 type localMailerImplementation struct {
 	Commander commander
 	Utils     utils.UtilsInterface
-
-	// Cmd  string
-	// Args []string
 }
 
 func New(command string, args []string) mailer.MailerInterface {
@@ -51,8 +48,8 @@ func (c commander) CombinedOutput(command string, args ...string) ([]byte, error
 }
 
 func (m *localMailerImplementation) SendMail(mail mailer.Mail) ([]byte, error) {
-	sender := m.Commander.Cmd  //exec.Command(m.Cmd, m.Args...)
-	stdin := m.Commander.stdin //.StdinPipe()
+	sender := m.Commander.Cmd
+	stdin := m.Commander.stdin
 
 	if mail.ReplayTo != "" {
 		io.WriteString(stdin, fmt.Sprintf("Reply-To: %s\n", mail.ReplayTo))
@@ -109,7 +106,7 @@ func (m *localMailerImplementation) SendMail(mail mailer.Mail) ([]byte, error) {
 		return nil, errors.Wrap(err, "[local mailer] closing stdin of mail prog")
 	}
 
-	out, err := sender.CombinedOutput() // Run()
+	out, err := sender.CombinedOutput()
 	if err != nil {
 		return nil, errors.Wrap(err, "[local mailer] executing mail prog")
 	}
