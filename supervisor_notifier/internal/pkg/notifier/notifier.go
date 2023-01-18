@@ -7,12 +7,16 @@ import (
 	botPkg "github.com/vldem/go-code-example/supervisor_notifier/internal/pkg/bot"
 )
 
+type NotifierInterface interface {
+	Notify(header string, payload string) error
+}
+
 type Notifier struct {
 	bot    botPkg.TelBot
 	mailer mailer.MailerInterface
 }
 
-func New() *Notifier {
+func New() NotifierInterface {
 	var bot botPkg.TelBot
 	var mailer mailer.MailerInterface
 
