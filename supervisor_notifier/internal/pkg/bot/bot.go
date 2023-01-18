@@ -3,7 +3,7 @@ package bot
 import (
 	"log"
 
-	"ur-services/spv-notif/internal/config"
+	"github.com/vldem/go-code-example/supervisor_notifier/internal/config"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/pkg/errors"

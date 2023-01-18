@@ -2,8 +2,9 @@ package main
 
 import (
 	"log"
-	"ur-services/spv-notif/internal/config"
-	listenerPgk "ur-services/spv-notif/internal/pkg/listener"
+
+	"github.com/vldem/go-code-example/supervisor_notifier/internal/config"
+	listenerPgk "github.com/vldem/go-code-example/supervisor_notifier/internal/pkg/listener"
 )
 
 func main() {

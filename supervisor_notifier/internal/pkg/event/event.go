@@ -3,7 +3,8 @@ package event
 import (
 	"strconv"
 	"strings"
-	"ur-services/spv-notif/internal/pkg/models"
+
+	"github.com/vldem/go-code-example/supervisor_notifier/internal/pkg/models"
 )
 
 func GetHeader(rawData string) *models.EventHeader {

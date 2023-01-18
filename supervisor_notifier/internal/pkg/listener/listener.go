@@ -5,15 +5,21 @@ import (
 	"fmt"
 	"os"
 	"time"
-	"ur-services/spv-notif/internal/pkg/event"
-	notifPkg "ur-services/spv-notif/internal/pkg/notifier"
+
+	notifPkg "github.com/vldem/go-code-example/supervisor_notifier/internal/pkg/notifier"
+
+	"github.com/vldem/go-code-example/supervisor_notifier/internal/pkg/event"
 )
+
+type SupervisorListenerInterface interface {
+	Listen()
+}
 
 type SupervisorListener struct {
 	programs map[string]time.Time
 }
 
-func New() *SupervisorListener {
+func New() SupervisorListenerInterface {
 
 	return &SupervisorListener{
 		programs: make(map[string]time.Time),
